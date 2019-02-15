@@ -79,7 +79,7 @@ func (p *pciDevice) ID() string {
 }
 
 func (p *pciDevice) String() string {
-	return pciDeviceStringer.With(p.ID, p.class, p.vendor, p.device, p.driver)
+	return pciDeviceStringer.With(p.ID(), p.class, p.vendor, p.device, p.driver)
 }
 
 // BindPci binds the driver to the given device ID
