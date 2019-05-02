@@ -546,16 +546,6 @@ func SystemInit(args *Config) error {
 	hwtxchecksum = args.HWTXChecksum
 	anyway := !args.RestrictedCloning
 
-	mbufNumber := uint(8191)
-	if args.MbufNumber != 0 {
-		mbufNumber = args.MbufNumber
-	}
-
-	mbufCacheSize := uint(250)
-	if args.MbufCacheSize != 0 {
-		mbufCacheSize = args.MbufCacheSize
-	}
-
 	sizeMultiplier = 64
 	if args.RingSize != 0 {
 		sizeMultiplier = args.RingSize
@@ -580,11 +570,6 @@ func SystemInit(args *Config) error {
 		return common.WrapWithNFError(nil, "debugTime should be larger or equal to schedTime", common.Fail)
 	}
 
-	needKNI := 0
-	if args.NeedKNI != false {
-		needKNI = 1
-	}
-
 	logType := common.No | common.Initialization | common.Debug
 	if args.LogType != 0 {
 		logType = args.LogType
@@ -607,20 +592,9 @@ func SystemInit(args *Config) error {
 		maxInIndex = args.MaxInIndex
 	}
 
-	NoPacketHeadChange := false
-	if args.NoPacketHeadChange == true {
-		NoPacketHeadChange = true
-	}
-
-	argc, argv := low.InitDPDKArguments(args.DPDKArgs)
 	// We want to add new clone if input ring is approximately 80% full
 	maxPacketsToClone := uint32(sizeMultiplier * burstSize / 5 * 4)
 	// TODO all low level initialization here! Now everything is default.
-	// Init eal
-	common.LogTitle(common.Initialization, "------------***-------- Initializing DPDK --------***------------")
-	if err := low.InitDPDK(argc, argv, burstSize, mbufNumber, mbufCacheSize, needKNI, NoPacketHeadChange); err != nil {
-		return err
-	}
 	// Init Ports
 	createdPorts = make([]port, low.GetPortsNumber(), low.GetPortsNumber())
 	for i := range createdPorts {
