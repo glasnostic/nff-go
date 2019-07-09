@@ -973,6 +973,10 @@ int xsk_configure_socket(char *name, int queue) {
 		return -1;
 	}
 	xsk->umem = xsk_configure_umem(name, NUM_FRAMES * XSK_UMEM__DEFAULT_FRAME_SIZE);
+	if (!xsk->umem) {
+		fprintf(stderr, "ERROR: Can't allocate memory for umem structure for AF_XDP: %s\n", name);
+		return -1;
+	}
 	cfg.rx_size = XSK_RING_CONS__DEFAULT_NUM_DESCS;
 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
 	cfg.libbpf_flags = 0;
@@ -986,7 +990,7 @@ int xsk_configure_socket(char *name, int queue) {
 	xsk->nameindex = if_nametoindex(name);
 	if (!xsk->nameindex) {
 		fprintf(stderr, "ERROR: interface %s for AF_XDP does not exist\n", name);
-		return 1;
+		return -1;
 	}
 
 	if (bpf_get_link_xdp_id(xsk->nameindex, &(xsk->prog_id), opt_xdp_flags) != 0) {
