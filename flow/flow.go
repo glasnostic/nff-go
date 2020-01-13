@@ -1122,6 +1122,11 @@ func mergeOneFlow(IN *Flow, rings low.Rings) {
 	}
 }
 
+// GetPortsNumber gets total number of available Ethernet devices.
+func GetPortsNumber() int {
+	return low.GetPortsNumber()
+}
+
 // GetPortMACAddress returns default MAC address of an Ethernet port.
 func GetPortMACAddress(port uint16) [types.EtherAddrLen]uint8 {
 	return low.GetPortMACAddress(port)
