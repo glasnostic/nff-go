@@ -2123,10 +2123,6 @@ func calculateSize(packetPtrs []uintptr, number uint) uint64 {
 	return size
 }
 
-func GetPortsNumber() int {
-	return low.GetPortsNumber()
-}
-
 func GetCreatedPorts() int {
 	return len(createdPorts)
 }
